@@ -1,4 +1,5 @@
 import math
+import hexdirection
 
 class FHexagon:
 	### Flat Orientation ###
@@ -10,6 +11,8 @@ class FHexagon:
 		self.offsetCoordinates = []
 		self.cornerPoints = []
 		self.hexType = "Flatsided"
+		self.direction = {"N": 0, "NE" : 1, "SE" : 2, "S": 3, "SW": 4, "NW": 5}
+		self.neighbours = [] # 0 : N, 1 : NE, 2 : SE, 3 : S, 4 : SW, 5 : NW 
 
 	def getCorners(self):
 		### Postion for corners ###
@@ -36,6 +39,29 @@ class FHexagon:
 		### Assigning coordinate for mentioned hexagon ###
 		offsetCoordinate = (x, y)
 		hexGridCoordinateList.append(offsetCoordinate)
+
+	def getNeighbor(self, Dint):
+		return self.neighbours[self.direction[Dint]]
+
+	def setNeighbor(self, Dint, cellOBJ):
+		# Set opposite neighbor and neighbour
+		print("Step1")
+		#print(cellOBJ)
+		#print(Dint)
+		# Take in string of the direction and then change it's key
+		#self.neighbours.append()
+		#cellOBJ.neighbours = cellOBJ.neighbours[cellOBJ.direction[Dint]]
+		#Above not working
+		print("Step2")
+		#cellOBJ.neighbours[cellOBJ.setOppositeNeighbor(Dint)] = self
+		print("Working")
+
+	def setOppositeNeighbor(self, Dint):
+		if self.direction[Dint] < 3:
+			newDirection = self.direction[Dint] + 3
+		else:
+			newDirection = self.direction[Dint] - 3
+		return newDirection
 
 class PHexagon:
 	### Pointy Orientation ###

@@ -19,10 +19,47 @@ class HexGrid:
 			else:
 				hexTypeOBJ.posx = (x + (y * 0.5 - y / 2) + 0.5) * ((hexTypeOBJ.outerCircle * 2) * 1.5)
 			hexTypeOBJ.posy = y * hexTypeOBJ.innerCircle
+
 			hexCopy = copy(hexTypeOBJ)
 			hexCopy.updateCorners(hexCopy.posx, hexCopy.posy, self.hexCellsCoordinates)
 			hexCopy.assignCoordinates(x, y, self.hexCellsOffsetCoordinates)
 			self.hexCells.append(hexCopy)
+
+			# Determine Neighbors
+			if(x > 0 and y == 0):
+				if ( (x & 1) != 0 ):
+					#hexTypeOBJ.setNeighbor(hexTypeOBJ.direction[SW], hexCopy.hexCells[i - 1])
+					print("")
+				else:
+					#hexTypeOBJ.setNeighbor(hexTypeOBJ.direction[NW], hexCopy.hexCells[i - 1])
+					print("")
+			if (y > 0):
+				if ( (x & 1) != 0):
+					print("Hex Cells")
+					print("Direction")
+					print(hexTypeOBJ.direction["SW"])
+					print("Object: ")
+					print(self.hexCells[i-1])
+					print("")
+					# int and obj comes into set Neighbour
+					hexTypeOBJ.setNeighbor(hexTypeOBJ.direction["SW"], self.hexCells[i - 1])
+
+				else:
+					if ( (x & 1) == 0 and x != 0):
+						# Set neighbor
+						# set Neighbor
+						# Set Neigbor
+						#print("if ( (x & 1) == 0 and x != 0)")
+						#print(x)
+						#print(y)
+						print("")
+					else:
+						#print(x)
+						#print(y)
+						print("")
+				#print(x)
+				#print(y)
+				print("")
 
 		elif hexTypeOBJ.hexType == "Pointy":
 			if y % 2 == 0:
@@ -71,7 +108,7 @@ grid01.createGrid()
 pointyHex = metricts.PHexagon(5, (0, 0)) # Radius, Coordinates
 grid02 = HexGrid(2, 2, pointyHex)
 grid02.createGrid()
-
+'''
 print("### Example 01 ###")
 for n in grid01.hexCells:
 	print("It's the following Hex Type: " + n.hexType)
@@ -87,4 +124,8 @@ for n in grid02.hexCells:
 	print("It has these offset Coordinates: " + str(n.offsetCoordinates))
 	print("It has these corners: " + str(n.cornerPoints))
 	print("")
+'''
+#for n in grid01.hexCells:
+#	print(n.offsetCoordinates)
+#	print(n.neighbours)
 input("Press any key to continue")
