@@ -43,7 +43,11 @@ class FHexagon:
 		hexGridCoordinateList.append(offsetCoordinate)
 
 	def getNeighbor(self, Dint):
-		return self.placeHolder[self.direction[Dint]]
+		if self.neighbours[Dint] == None:
+			return None
+		else:
+			returnNeigh = self.neighbours[Dint]
+			return returnNeigh.offsetCoordinates
 
 	def setNeighbor(self, Dint, cellOBJ):
 		self.placeHolder[Dint] = cellOBJ
@@ -103,7 +107,11 @@ class PHexagon:
 		hexGridCoordinateList.append(offsetCoordinate)
 
 	def getNeighbor(self, Dint):
-		return self.placeHolder[self.direction[Dint]]
+		if self.neighbours[Dint] == None:
+			return None
+		else:
+			returnNeigh = self.neighbours[Dint]
+			return returnNeigh.offsetCoordinates
 
 	def setNeighbor(self, Dint, cellOBJ, boolean):
 		if boolean != None:

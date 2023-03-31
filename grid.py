@@ -111,11 +111,6 @@ class HexGrid:
 				obj.offsetCoordinates = self.hexCellsOffsetCoordinates[offsetCord]
 			offsetCord += 1
 
-
-
-
-
-
 ### Example 01 ###
 flatsidedHex = metricts.FHexagon(5, (0, 0)) # Radius, Coordinates
 grid01 = HexGrid(3, 3, flatsidedHex)
@@ -173,7 +168,7 @@ for n in grid01.hexCells:
 		abr += 1
 
 print("-------------------------")
-'''
+
 print("-------------------------")
 for n in grid02.hexCells:
 	abr = 0
@@ -200,6 +195,9 @@ for n in grid02.hexCells:
 		else:
 			print(currentDir + ": " + str(qui.offsetCoordinates))
 		abr += 1
-
+'''
+boll = grid02.hexCells[0]
+dint = boll.direction["SE"]
+print(boll.getNeighbor(dint))
 print("-------------------------")
 input("Press any key to continue")
