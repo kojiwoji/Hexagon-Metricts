@@ -1,6 +1,5 @@
 import math
 from copy import copy, deepcopy
-import hexdirection
 
 class FHexagon:
 	### Flat Orientation ###
@@ -10,11 +9,13 @@ class FHexagon:
 		self.innerCircle = math.sqrt(3) * radius
 		self.posx, self.posy = startPos
 		self.offsetCoordinates = []
+		self.cubeCoordinates = []
 		self.cornerPoints = []
 		self.hexType = "Flatsided"
 		self.direction = {"N": 0, "NE" : 1, "SE" : 2, "S": 3, "SW": 4, "NW": 5}
 		self.placeHolder = {0: None, 1: None, 2: None, 3: None, 4: None, 5: None} # 0 : obj, 1 : obj, 2 : obj, 3 : obj, 4 : obj, 5 : obj 
 		self.neighbours = self.placeHolder.copy()
+		self.distance = 0
 	def getCorners(self):
 		### Postion for corners ###
 		self.cornerPoints.append((0.5 * self.outerCircle, self.innerCircle))
@@ -47,15 +48,20 @@ class FHexagon:
 			return None
 		else:
 			returnNeigh = self.neighbours[Dint]
-			return returnNeigh.offsetCoordinates
+			return returnNeigh
 
-	def setNeighbor(self, Dint, cellOBJ):
-		self.placeHolder[Dint] = cellOBJ
-		opposite = cellOBJ.setOppositeNeighbor(Dint)
-		cellOBJ.placeHolder = cellOBJ.neighbours.copy()
-		cellOBJ.placeHolder[opposite] = self
-		cellOBJ.neighbours = cellOBJ.placeHolder.copy()
-		self.neighbours = self.placeHolder.copy()
+	def setNeighbor(self, Dint, cellOBJ, boolean):
+		if boolean != None:
+			self.placeHolder[Dint] = cellOBJ
+			opposite = cellOBJ.setOppositeNeighbor(Dint)
+			cellOBJ.placeHolder = cellOBJ.neighbours.copy()
+			cellOBJ.placeHolder[opposite] = self
+			cellOBJ.neighbours = cellOBJ.placeHolder.copy()
+			self.neighbours = self.placeHolder.copy()
+		else:
+			self.placeHolder[Dint] = None
+			cellOBJ.placeHolder = cellOBJ.neighbours.copy()
+			cellOBJ.neighbours = cellOBJ.placeHolder.copy()
 
 	def setOppositeNeighbor(self, Dint):
 		if Dint < 3:
@@ -63,6 +69,13 @@ class FHexagon:
 		else:
 			newDirection = Dint - 3
 		return newDirection
+
+
+	def distanceTo(self, offsetCoordinates):
+		x1,y1 = self.offsetCoordinates
+		x2, y2 = offsetCoordinates
+		return (abs(x1 - x2) + abs(y1 - y2))
+
 
 class PHexagon:
 	### Pointy Orientation ###
@@ -72,12 +85,13 @@ class PHexagon:
 		self.innerCircle = math.sqrt(3) * radius
 		self.posx, self.posy = startPos
 		self.offsetCoordinates = []
+		self.cubeCoordinates = []
 		self.cornerPoints = []
 		self.hexType = "Pointy"
 		self.direction = {"NE": 0, "E" : 1, "SE" : 2, "SW": 3, "W": 4, "NW": 5}
 		self.placeHolder = {0: None, 1: None, 2: None, 3: None, 4: None, 5: None} # 0 : obj, 1 : obj, 2 : obj, 3 : obj, 4 : obj, 5 : obj 
-		self.updateHolder = {}
 		self.neighbours = self.placeHolder.copy()
+		self.distance = 0
 
 	def getCorners(self):
 	        ### Postion for corners ###
@@ -111,7 +125,7 @@ class PHexagon:
 			return None
 		else:
 			returnNeigh = self.neighbours[Dint]
-			return returnNeigh.offsetCoordinates
+			return returnNeigh
 
 	def setNeighbor(self, Dint, cellOBJ, boolean):
 		if boolean != None:
@@ -132,3 +146,8 @@ class PHexagon:
 		else:
 			newDirection = Dint - 3
 		return newDirection
+
+	def distanceTo(self, offsetCoordinates):
+		x1,y1 = self.offsetCoordinates
+		x2, y2 = offsetCoordinates
+		return (abs(x1 - x2) + abs(y1 - y2))

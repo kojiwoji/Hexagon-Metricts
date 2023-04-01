@@ -3,6 +3,7 @@ from copy import copy, deepcopy
 
 class HexGrid:
 	def __init__(self, width, height, hexTypeOBJ):
+		self.maxValue = 2147483647
 		self.columns = width
 		self.rows = height
 		self.hexTypeOBJ = hexTypeOBJ
@@ -10,6 +11,30 @@ class HexGrid:
 		self.hexCells = []
 		self.hexCellsCoordinates = []
 		self.hexCellsOffsetCoordinates = []
+
+	def searchCell(self, cell):
+		qurt = 0
+		while qurt < len(self.hexCells):
+			self.hexCells[qurt].distance = self.maxValue
+			qurt += 1
+		queue = []
+		cell.distance = 0
+		queue.append(cell)
+		while len(queue) > 0:
+			current = queue[0]
+			d = 0
+			while d <= 5:
+				neighbor = current.getNeighbor(d)
+				if neighbor != None:
+					None
+				if (neighbor != None and neighbor.distance == self.maxValue):
+					neighbor.distance = current.distance + 1
+					queue.append(neighbor)
+				d += 1
+			queue.pop(0)
+
+	def findDistanceTo(self, selectedCell):
+		HexGrid.searchCell(self, selectedCell)
 
 	def createCell(self, x: int, y: int, i: int, hexTypeOBJ):
 		# Check if odd row
@@ -31,28 +56,37 @@ class HexGrid:
 			hexCopy.assignCoordinates(x, y, self.hexCellsOffsetCoordinates)
 			self.hexCells.append(hexCopy)
 			# Determine Neighbors
-
 			if (x > 0 and y == 0): # 1st row is a special snowflake
-				if ((x & 1) != 0): # Odd row
-					hexCopy.setNeighbor(hexCopy.direction["SW"], self.hexCells[i - 1])
+				if ((x & 1) != 0): # Odd row Yellow
+					hexCopy.setNeighbor(hexCopy.direction["SW"], self.hexCells[i - 1], True)
 				else:
-					hexCopy.setNeighbor(hexCopy.direction["NW"], self.hexCells[i - 1])
+					hexCopy.setNeighbor(hexCopy.direction["NW"], self.hexCells[i - 1], True)
 			if (y > 0):
-				if ((x & 1) != 0 and x != 0): # Odd row and not 0
-					hexCopy.setNeighbor(hexCopy.direction["SW"], self.hexCells[i - 1])
+				if ((x & 1) != 0): # Odd row
+					if x != 0 and x != self.columns - 1:
+						hexCopy.setNeighbor(hexCopy.direction["SW"], self.hexCells[i - 1], True)
+					
+					elif x == self.columns - 1:
+						hexCopy.setNeighbor(hexCopy.direction["SE"], self.hexCells[i - self.columns - 1], None)
+						hexCopy.setNeighbor(hexCopy.direction["SW"], self.hexCells[i - 1], True)			
 				else:
-					if ((x & 1) == 0 and x != 0 and x != self.columns-1): # Even row but not 0
-						hexCopy.setNeighbor(hexCopy.direction["SE"], self.hexCells[i - self.columns + 1])
-						hexCopy.setNeighbor(hexCopy.direction["SW"], self.hexCells[i - self.columns - 1])
-					else: # Even row and 0
-						if (x == 0 or x == self.columns-1):
-							if x == 0:
-								hexCopy.setNeighbor(hexCopy.direction["SE"], self.hexCells[i - self.columns + 1])
-							else:
-								hexCopy.setNeighbor(hexCopy.direction["NW"], self.hexCells[i - 1])
-								hexCopy.setNeighbor(hexCopy.direction["SW"], self.hexCells[i - self.columns - 1])
+					if x != 0 and x != self.columns - 1:
+						hexCopy.setNeighbor(hexCopy.direction["NW"], self.hexCells[i - 1], True)
+						hexCopy.setNeighbor(hexCopy.direction["SE"], self.hexCells[i - self.columns + 1], True)
+						hexCopy.setNeighbor(hexCopy.direction["SW"], self.hexCells[i - self.columns - 1], True)
 
-				hexCopy.setNeighbor(hexCopy.direction["S"], self.hexCells[i - self.columns])
+					elif x == self.columns - 1:
+						hexCopy.setNeighbor(hexCopy.direction["NW"], self.hexCells[i - 1], True)
+						hexCopy.setNeighbor(hexCopy.direction["SE"], self.hexCells[i - self.columns + 1], None)
+						hexCopy.setNeighbor(hexCopy.direction["SW"], self.hexCells[i - self.columns - 1], True)
+
+					else:
+						hexCopy.setNeighbor(hexCopy.direction["SW"], self.hexCells[i - self.columns - 1], None)
+						hexCopy.setNeighbor(hexCopy.direction["NW"], self.hexCells[i - 1], None)
+						hexCopy.setNeighbor(hexCopy.direction["SE"], self.hexCells[i - self.columns + 1], True)
+
+				hexCopy.setNeighbor(hexCopy.direction["S"], self.hexCells[i - self.columns], True)
+
 
 		elif hexTypeOBJ.hexType == "Pointy":
 			if y % 2 == 0:
@@ -113,7 +147,7 @@ class HexGrid:
 
 ### Example 01 ###
 flatsidedHex = metricts.FHexagon(5, (0, 0)) # Radius, Coordinates
-grid01 = HexGrid(3, 3, flatsidedHex)
+grid01 = HexGrid(8, 8, flatsidedHex)
 grid01.createGrid()
 ### Example 02 ###
 pointyHex = metricts.PHexagon(5, (0, 0)) # Radius, Coordinates
@@ -166,9 +200,9 @@ for n in grid01.hexCells:
 		else:
 			print(currentDir + ": " + str(qui.offsetCoordinates))
 		abr += 1
-
 print("-------------------------")
-
+'''
+'''
 print("-------------------------")
 for n in grid02.hexCells:
 	abr = 0
@@ -196,8 +230,19 @@ for n in grid02.hexCells:
 			print(currentDir + ": " + str(qui.offsetCoordinates))
 		abr += 1
 '''
-boll = grid02.hexCells[0]
-dint = boll.direction["SE"]
-print(boll.getNeighbor(dint))
+
+boll = grid01.hexCells[0]
+grid01.findDistanceTo(boll)
+
+print("-------------------------")
+print("Selected cell: " + str(boll.offsetCoordinates))
+print("")
+for n in grid01.hexCells:
+	qr = n.distance
+	print(n.offsetCoordinates)
+	print("Distance: " + str(qr))
+	print("")
+
+
 print("-------------------------")
 input("Press any key to continue")
