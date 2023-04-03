@@ -57,12 +57,12 @@ class HexGrid:
 			self.hexCells.append(hexCopy)
 			# Determine Neighbors
 			if (x > 0 and y == 0): # 1st row is a special snowflake
-				if ((x & 1) != 0): # Odd row Yellow
+				if ((x & 1) != 0):
 					hexCopy.setNeighbor(hexCopy.direction["SW"], self.hexCells[i - 1], True)
 				else:
 					hexCopy.setNeighbor(hexCopy.direction["NW"], self.hexCells[i - 1], True)
 			if (y > 0):
-				if ((x & 1) != 0): # Odd row
+				if ((x & 1) != 0):
 					if x != 0 and x != self.columns - 1:
 						hexCopy.setNeighbor(hexCopy.direction["SW"], self.hexCells[i - 1], True)
 					
@@ -100,20 +100,16 @@ class HexGrid:
 			self.hexCells.append(hexCopy)
 
 			# Determine Neighbors
-
 			if x > 0:
 				hexCopy.setNeighbor(hexCopy.direction["W"], self.hexCells[i - 1], True)
 			else:
 				hexCopy.setNeighbor(hexCopy.direction["W"], self.hexCells[i - 1], None)
 			if y > 0:
-				if ((y & 1) == 0): # White
-					# SE
+				if ((y & 1) == 0):
 					hexCopy.setNeighbor(hexCopy.direction["SE"], self.hexCells[i - self.columns], True)
 					if (x > 0):
-						#SW
 						hexCopy.setNeighbor(hexCopy.direction["SW"], self.hexCells[i - self.columns - 1], True)
 				else:
-					# Yellow
 					if x != self.columns - 1:
 						hexCopy.setNeighbor(hexCopy.direction["SW"], self.hexCells[i - self.columns], True)
 						hexCopy.setNeighbor(hexCopy.direction["SE"], self.hexCells[i - self.columns + 1], True)
@@ -150,9 +146,9 @@ flatsidedHex = metricts.FHexagon(5, (0, 0)) # Radius, Coordinates
 grid01 = HexGrid(8, 8, flatsidedHex)
 grid01.createGrid()
 ### Example 02 ###
-pointyHex = metricts.PHexagon(5, (0, 0)) # Radius, Coordinates
-grid02 = HexGrid(8, 8, pointyHex)
-grid02.createGrid()
+#pointyHex = metricts.PHexagon(5, (0, 0)) # Radius, Coordinates
+#grid02 = HexGrid(8, 8, pointyHex)
+#grid02.createGrid()
 '''
 print("### Example 01 ###")
 for n in grid01.hexCells:

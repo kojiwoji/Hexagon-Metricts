@@ -16,6 +16,7 @@ class FHexagon:
 		self.placeHolder = {0: None, 1: None, 2: None, 3: None, 4: None, 5: None} # 0 : obj, 1 : obj, 2 : obj, 3 : obj, 4 : obj, 5 : obj 
 		self.neighbours = self.placeHolder.copy()
 		self.distance = 0
+		
 	def getCorners(self):
 		### Postion for corners ###
 		self.cornerPoints.append((0.5 * self.outerCircle, self.innerCircle))
@@ -70,12 +71,10 @@ class FHexagon:
 			newDirection = Dint - 3
 		return newDirection
 
-
 	def distanceTo(self, offsetCoordinates):
 		x1,y1 = self.offsetCoordinates
 		x2, y2 = offsetCoordinates
 		return (abs(x1 - x2) + abs(y1 - y2))
-
 
 class PHexagon:
 	### Pointy Orientation ###
